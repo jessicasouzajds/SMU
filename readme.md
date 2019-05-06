@@ -14,3 +14,6 @@ Exemplo de relatório (em construção até 06/05): https://boidacarapreta.githu
 
 
 Usar a gravação feita na última aula para extração dos parâmetros solicitados.
+
+
+Os arquivos podem ser encontrados aqui (https://drive.google.com/drive/u/0/folders/1gpM5Skf30DjDoagxDWkEpe9EGHiQYI--) depois vamos passar para o GIT.
