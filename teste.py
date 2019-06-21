@@ -1,6 +1,7 @@
 import cv2
 import gi 
 import numpy as np
+import socket
 
 gi.require_version('Gst', '1.0')
 gi.require_version('GstRtspServer', '1.0') 
@@ -9,20 +10,36 @@ from gi.repository import Gst, GstRtspServer, GObject
 class SensorFactory(GstRtspServer.RTSPMediaFactory):
   def __init__(self, **properties): 
     super(SensorFactory, self).__init__(**properties) 
-    self.cap = cv2.VideoCapture(0)
-    #self.cap = cv2.VideoCapture("rtsp://....")
+    #self.cap = cv2.VideoCapture(0)
+    self.uri = self.recv_uri()
+    self.cap = cv2.VideoCapture(self.uri.decode('utf-8'))
     self.number_frames = 0 
     self.fps = 30
     self.duration = 1 / self.fps * Gst.SECOND  # duration of a frame in nanoseconds 
     self.launch_string = 'appsrc name=source is-live=true block=true format=GST_FORMAT_TIME ' \
-                         'caps=video/x-raw,format=BGR,width=640,height=480,framerate={}/1 ' \
+                         'caps=video/x-raw,format=BGR,width=1280,height=720,framerate={}/1 ' \
                          '! videoconvert ! video/x-raw,format=I420 ' \
                          '! x264enc speed-preset=ultrafast tune=zerolatency ' \
                          '! rtph264pay config-interval=1 name=pay0 pt=96'.format(self.fps)
+  
+  
     cascPath = "haarcascade_frontalface_default.xml"
 
     # Create the haar cascade
     self.faceCascade = cv2.CascadeClassifier(cascPath)
+
+  def recv_uri(self):
+        sock = socket.socket(socket.AF_INET, # Internet
+                        socket.SOCK_STREAM) # UDP
+        sock.bind(("191.36.15.80", 5555))
+        sock.listen()
+        data, addr = sock.accept()
+        uri = data.recv(1024)
+        print(addr)
+        sock.send(str("endereco").encode())
+        sock.close()
+        print(uri)
+        return uri
 
   def censored(self, image):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
