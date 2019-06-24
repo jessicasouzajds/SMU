@@ -77,9 +77,8 @@ Feito através do SDP
 
 ### Transporte de Mídia:
 
-#### Protocolos usados: Para o transporte da mídia foi utilizado o protocolo RTP (Real time protocol, RFC 3550), que faz a transmissão de mídia em serviços de rede multicast e unicast.
-
- A figura a seguir mostra os pacotes RTP sendo transmitidos no Wireshark.
+#### Protocolos usados: 
+Para o transporte da mídia foi utilizado o protocolo RTP (Real time protocol, RFC 3550), que faz a transmissão de mídia em serviços de rede multicast e unicast. A figura a seguir mostra os pacotes RTP sendo transmitidos no Wireshark.
 
 [![rtp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG) 
 
