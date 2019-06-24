@@ -39,18 +39,20 @@ Na classe SensorFactory é implementado os seguintes itens:
 - Recebimento da URI da câmera do lado cliente;
 - Envio da URI com a stream processada para o cliente;
 - Processamento da stream para a detecção facial e censura da região do rosto e retorno da imagem em escala RGB;
-- Geração do buffer para envio da imagem por RTSP
 
-Na classe GstServer é realizada a chamada da classe SensorFactory e envido ....... [CONTINUAR AQUI]
+Na classe GstServer é realizada a preparação do servidor RTSP, preparando a mídia para transmissão após o processamento.
 
 
 ## O algoritmo de detecção facial:
-[CONTINUAR A partir DAQUI]
-Para a detecção de facial foi utilizado o método Haar Cascad o qual é um método eficaz de detecção de objetos proposto por Paul Viola e Michael Jones. É uma abordagem baseada em Machine Learning, em que uma função cascade é treinada com o usp de muitas imagens positivas e negativas a qual é então usada para detectar objetos em outras imagens.
 
-A função implementada usa parametros prontos, os quais se encontram em um arquivo xml. O modelo utilizado foi treinado para faces frontais podendo ter problemas caso o rosto a ser detectado esteja virado em angulo. Devido a constrições temporai foi utilizado o código como base para a implementação.
+Para a detecção de facial foi utilizado o método Haar Cascade, o qual é um método eficaz de detecção de objetos proposto por Paul Viola e Michael Jones. É uma abordagem baseada em Machine Learning em que uma função cascade é treinada com diversas imagens positivas e negativas, a qual é então usada para detectar objetos em outras imagens.
 
-Para a omição da face detectada foi pego a area em foi detectado o rosto e reduzida a resolução para 4x4 e em seguida aumentada a resolução devolta para a original tendo como resultado uma area pixelada devido a perda de informação. A area da face é sobreescrita com a imagem pixaleda criada fazendo com que se torne impossivel recuperar a imagem original.
+A função implementada usa parâmetros prontos, os quais se encontram em um arquivo xml. O modelo utilizado foi treinado para faces frontais podendo ter problemas caso o rosto a ser detectado esteja virado em ângulo. Devido a constrições temporais foi utilizado o código como base para a implementação.
+
+Para a omissão da face detectada, uma vez detectado o rosto foi realizada uma redução de resolução para 4x4, em seguida foi aumentada a resolução de volta para a original e assim tendo como resultado uma área pixelada devido à perda de informação. A área da face é então sobrescrita com a imagem pixelada, fazendo com que se torne impossivel recuperar a imagem original. A figura a seguir mostra o funcionamento do algoritmo de detecção facial e pixelização.
+
+[![facedetect](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/face-detect.png)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/face-detect.png) 
+
 
 
 # [estrutura] O relatório do projeto final deve contemplar os 4 componentes básicos e, como bônus, os 2 adicionais:
