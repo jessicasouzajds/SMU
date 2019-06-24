@@ -54,15 +54,16 @@ Para a omissão da face detectada, uma vez detectado o rosto foi realizada uma r
 [![facedetect](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/face-detect.png)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/face-detect.png) 
 
 
+## Mídias:
 
-# [estrutura] O relatório do projeto final deve contemplar os 4 componentes básicos e, como bônus, os 2 adicionais:
+A parte a seguir explora toda a parte de tráfego de dados por detrás da aplicação, detalhando as partes de sinalização, negociação, escolha de caminho e transporte de mídia.
 
-## Sinalização:
+### Sinalização:
 Feita através do RTSP
 
 [![CenarioRtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG) 
 
-## Negociação de mídia:
+### Negociação de mídia:
 Para esse projeto foi utilizado como dados video e texto. O texto foi utlizado entre o cliente e servido para a identicação das uri's RSTP com o streaming de video, o cliente manda a uma mensagem de texto com a uri da streaming a ser censurada e o servidor responde com uma uri RSTP da streaming com as imagens censuradas. As streamings RSTP carregam apenas video, não contendo audio.
 
 Foram utilizados dois codecs no projeto. O primeiro é o MJPG (Motion JPG) o que é proveniente da camera capturando as imagens, esse formato foi utilizado pois facilita o processamento das imagens já que cada frame é uma imagen JPG. O segundo codec foi o H.264 o qual foi utilizado para transmissão da stream pós processamento.
@@ -72,17 +73,17 @@ Feito através do SDP
 [![Cenariosdp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-sdp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-sdp.PNG) 
 
 
-## Escolha de caminho;
+### Escolha de caminho;
 
-## Transporte de Mídia:
+### Transporte de Mídia:
 
-### Protocolos usados: Para o transporte da mídia foi utilizado o protocolo RTP (Real time protocol, RFC 3550), que faz a transmissão de mídia em serviços de rede multicast e unicast.
+#### Protocolos usados: Para o transporte da mídia foi utilizado o protocolo RTP (Real time protocol, RFC 3550), que faz a transmissão de mídia em serviços de rede multicast e unicast.
 
  A figura a seguir mostra os pacotes RTP sendo transmitidos no Wireshark.
 
 [![rtp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG) 
 
-### Mecanismos de controle e monitoramento de entrega: quais os protocolos ou serviços de acompanhamento de:
+#### Mecanismos de controle e monitoramento de entrega: quais os protocolos ou serviços de acompanhamento de:
 - Latência;
 -  Jitter; 
 - Descarte de mensagem;
@@ -94,8 +95,7 @@ As figuras a seguir mostram a ferramenta de análise de pacotes RTP, porém a la
 
 [![rtp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtp1.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG) 
 
-
-
+   
 [![rtp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtp2.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG) 
 
 
