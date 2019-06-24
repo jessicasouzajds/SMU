@@ -61,6 +61,10 @@ Feita através do RTSP
 [![CenarioRtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG) 
 
 ## Negociação de mídia:
+Para esse projeto foi utilizado como dados video e texto. O texto foi utlizado entre o cliente e servido para a identicação das uri's RSTP com o streaming de video, o cliente manda a uma mensagem de texto com a uri da streaming a ser censurada e o servidor responde com uma uri RSTP da streaming com as imagens censuradas. As streamings RSTP carregam apenas video, não contendo audio.
+
+Foram utilizados dois codecs no projeto. O primeiro é o MJPG (Motion JPG) o que é proveniente da camera capturando as imagens, esse formato foi utilizado pois facilita o processamento das imagens já que cada frame é uma imagen JPG. O segundo codec foi o H.264 o qual foi utilizado para transmissão da stream pós processamento.
+
 Feito através do SDP
 
 [![Cenariosdp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-sdp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-sdp.PNG) 
