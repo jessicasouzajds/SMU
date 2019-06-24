@@ -6,13 +6,13 @@ Autores: Bruno A. de Pinho e Jessica de Souza
 
 O objetivo deste trabalho é realizar a detecção facial em tempo real a partir de uma câmera IP utilizando algoritmos de visão computacional e o uso de RTSP para a transmissão da mídia.
 
-## Resumo do cenário:
+## - Resumo do cenário:
 Foi realizada uma transmissão de vídeo via streaming, utilizando o protocolo RTSP para negociação e transmissão. O primeiro streaming foi a imagem de captura da câmera VIP-S4000, da Intelbras. Esta streaming foi oferecida através de uma URI RTSP para o servidor de processamento. O servidor de processamento realizou a análise da imagem, identificando faces e inserindo a censura de rostos, utilizando visão computacional. Por fim, a imagem processada foi retornada ao cliente através de uma segunda URI RTSP. A imagem abaixo exemplifica o cenário utilizado.
  
 
 [![CenarioRede](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/cenario.png)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/cenario.png) 
  
-## Comunicação entre cliente e servidor:
+## - Comunicação entre cliente e servidor:
 
 A câmera IP usada neste trabalho apresentou alterações de seu IP de acordo com a rede em que estava conectada. Para que fosse simplificada a atualização da URI da câmera para o servidor, realizamos uma comunicação via sockets entre cliente e servidor. No lado cliente, é enviado para o servidor por meio de uma string a URI para acesso RTSP da câmera, que possui a seguinte estrutura:
 
@@ -26,7 +26,7 @@ IP:PORTA_RTSP/timestamp_da_requisição
 ```
 O timestamp é uma forma de a cada streaming haver um identificador único, que seria o momento da requisição.
 
-## Implementação do algoritmo em Python:
+## - Implementação do algoritmo em Python:
 
 ```sh
 Implementação baseada em: https://github.com/superdump/pyrtsp.
@@ -43,7 +43,7 @@ Na classe SensorFactory é implementado os seguintes itens:
 Na classe GstServer é realizada a preparação do servidor RTSP, preparando a mídia para transmissão após o processamento.
 
 
-## O algoritmo de detecção facial:
+## - O algoritmo de detecção facial:
 
 Para a detecção de facial foi utilizado o método Haar Cascade, o qual é um método eficaz de detecção de objetos proposto por Paul Viola e Michael Jones. É uma abordagem baseada em Machine Learning em que uma função cascade é treinada com diversas imagens positivas e negativas, a qual é então usada para detectar objetos em outras imagens.
 
@@ -54,40 +54,51 @@ Para a omissão da face detectada, uma vez detectado o rosto foi realizada uma r
 [![facedetect](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/face-detect.png)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/face-detect.png) 
 
 
-## Mídias:
+## - Mídias:
 
 A parte a seguir explora toda a parte de tráfego de dados por detrás da aplicação, detalhando as partes de sinalização, negociação, escolha de caminho e transporte de mídia.
 
-### Sinalização:
+### 1. Sinalização:
 Feita através do RTSP
 
 [![CenarioRtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG) 
 
-### Negociação de mídia:
-Para esse projeto foi utilizado como dados video e texto. O texto foi utlizado entre o cliente e servido para a identicação das uri's RSTP com o streaming de video, o cliente manda a uma mensagem de texto com a uri da streaming a ser censurada e o servidor responde com uma uri RSTP da streaming com as imagens censuradas. As streamings RSTP carregam apenas video, não contendo audio.
 
-Foram utilizados dois codecs no projeto. O primeiro é o MJPG (Motion JPG) o que é proveniente da camera capturando as imagens, esse formato foi utilizado pois facilita o processamento das imagens já que cada frame é uma imagen JPG. O segundo codec foi o H.264 o qual foi utilizado para transmissão da stream pós processamento.
 
-Feito através do SDP
+### 2. Negociação de mídia:
+
+#### a. Tipos de mídia:
+Para esse projeto foi utilizado como dados video e texto. O texto foi utlizado entre o cliente e servidor para a identificação das uri's RSTP com o streaming de video. O cliente envia uma mensagem de texto com a uri da streaming a ser censurada e o servidor responde com uma uri RSTP da streaming com as imagens já processadas e com censura de rosto. As streamings RSTP carregam apenas video, não contendo áudio.
+
+#### b. Codecs: 
+Foram utilizados dois codecs no projeto. O primeiro é o MJPG (Motion JPG) o que é proveniente da câmera capturando as imagens. Esse formato foi utilizado pois facilita o processamento das imagens, já que cada frame é uma imagen JPG. O segundo codec foi o H.264 o qual foi utilizado para transmissão da stream pós processamento. Apesar da qualidade de definição, o uso deste codec tornou a nossa transmissão pesada e com alta latência (apesar de o wireshark não ter conseguido mensurar, foi nítido o atraso para o carregamento da stream no lado cliente).
+
+Os tipos de mídia e codecs podem ser vistos nos pacotes SDP (que descrevem a sessão em curso), note na figura a seguir que em vermelho estão destacadas estas informações obtidas no pacote capturado no wireshark.
 
 [![Cenariosdp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-sdp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-sdp.PNG) 
 
 
-### Escolha de caminho;
 
-### Transporte de Mídia:
+### 3. Escolha de caminho;
 
-#### Protocolos usados: 
+#### a. Protocolos usados:
+[escrever aqui]
+
+
+
+### 4. Transporte de Mídia:
+
+#### a. Protocolos usados: 
 Para o transporte da mídia foi utilizado o protocolo RTP (Real time protocol, RFC 3550), que faz a transmissão de mídia em serviços de rede multicast e unicast. A figura a seguir mostra os pacotes RTP sendo transmitidos no Wireshark.
 
 [![rtp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG) 
 
-#### Mecanismos de controle e monitoramento de entrega: quais os protocolos ou serviços de acompanhamento de:
+#### b. Mecanismos de controle e monitoramento de entrega: quais os protocolos ou serviços de acompanhamento de:
 - Latência;
 -  Jitter; 
 - Descarte de mensagem;
 
-O próprio Wireshark possui ferramentas de análise de pacotes RTP, porém não foi possível executar as streams pois a configuração da gravação do RTP no lado do cliente não tornou possível visualizar a stream. No wireshark é possível verificar o total de pacotes transmitidos por stream, o total de pacotes perdidos e o valor delta calculado (que utiliza o marker para fazer os cálculos). Podemos observar que até o valor do marker, a largura de banda do pacote vai aumentando.
+O próprio Wireshark possui ferramentas de análise de pacotes RTP, porém não foi possível executar as streams pois a configuração da gravação do RTP no lado do cliente não tornou possível visualizar a stream. No wireshark é possível verificar o total de pacotes transmitidos por stream, o total de pacotes perdidos e o valor delta calculado (que utiliza o marker para fazer os cálculos). Podemos observar que até o valor do marker, a largura de banda do pacote vai aumentando. O timestamp é a variável que é utilizada para o cálculo dos mecanismos de controle. Se o cliente e o servidor estivessem no mesmo host seria possível ter realizado os cálculos da forma correta.
 
 As figuras a seguir mostram a ferramenta de análise de pacotes RTP, porém a latência dos pacotes nos pareceu estar calculada de forma incorreta, pois houve uma alta latência e no software este campo apresentou valores zerados.
 
@@ -99,17 +110,13 @@ As figuras a seguir mostram a ferramenta de análise de pacotes RTP, porém a la
 
 
 
+### 5. Qualidade de serviço:
+
+Para a qualidade de serviço, podemos observar no wireshark o uso do protocolo RTCP, que realiza as medições de atraso de jitter, conforme mostra a figura a seguir.
+
+[![qos](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/qos.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/qos.PNG) 
 
 
-
-
-
-
-
-
-
-
-(Opcional) Qualidade de serviço;
 (Opcional) Segurança.
 
 Link referência relatório: https://boidacarapreta.github.io/smu20191/projeto_final.html
