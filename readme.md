@@ -63,6 +63,7 @@ Feita através do RTSP
 
 [![CenarioRtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG) 
 
+O pacote de setup inicia a sessão RTSP, o pacote de play inicia a transmissão de dados na stream, o pacote de teardown faz com que a sessão RTSP deixe de existir e o describe especifica a apresentação do objeto de mídia. A figura a seguir mostra o agrupamento das mensagens RTSP, com a contagem de cada tipo de pacote gerado. 
 [![Rtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtspp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtspp.PNG) 
 
 
