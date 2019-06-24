@@ -72,8 +72,40 @@ Feito através do SDP
 
 ## Escolha de caminho;
 
-## Transporte de Mídia;
-Utilizou o servidor Gstreamer (correto??)
+## Transporte de Mídia:
+
+Protocolos usados: Para o transporte da mídia foi utilizado o protocolo RTP (Real time protocol, RFC 3550), que faz a transmissão de mídia em serviços de rede multicast e unicast.
+
+ A figura a seguir mostra os pacotes RTP sendo transmitidos no Wireshark.
+
+[![rtp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG) 
+
+Mecanismos de controle e monitoramento de entrega: quais os protocolos ou serviços de acompanhamento de:
+
+Latência;
+ Jitter; Descarte de mensagem.
+
+
+O próprio Wireshark possui ferramentas de análise de pacotes RTP, porém não foi possível executar as streams pois a configuração da gravação do RTP no lado do cliente não tornou possível visualizar a stream. No wireshark é possível verificar o total de pacotes transmitidos por stream, o total de pacotes perdidos e o valor delta calculado (que utiliza o marker para fazer os cálculos). Podemos observar que até o valor do marker, a largura de banda do pacote vai aumentando.
+
+As figuras a seguir mostram a ferramenta de análise de pacotes RTP, porém a latência dos pacotes nos pareceu estar calculada de forma incorreta, pois houve uma alta latência e no software este campo apresentou valores zerados.
+
+
+[![rtp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtp1.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG) 
+
+
+[![rtp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtp2.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG) 
+
+
+
+
+
+
+
+
+
+
+
 
 
 (Opcional) Qualidade de serviço;
