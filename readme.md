@@ -29,7 +29,8 @@ O timestamp é uma forma de a cada streaming haver um identificador único, que 
 ## Implementação do algoritmo em Python:
 
 ```sh
-Implementação baseada em: https://github.com/superdump/pyrtsp, onde realizamos a instalação de todas as extensões recomendadas para o funcionamento do programa.
+Implementação baseada em: https://github.com/superdump/pyrtsp.
+Realizamos a instalação de todas as extensões recomendadas para o funcionamento do programa.
 ```
 
 Existem duas classes principais em nossa implementação, o SensorFactory e o GstServer. Foi utilizado o Gstreamer junto com RTSP para que fosse realizada a captura em tempo real e processamento da imagem. Embora foi definido inicialmente que iríamos processar a imagem e trabalhar com MJPEG, na implementação acabamos trabalhando com H.264 pois as documentações da parte de codificação da stream não foram suficientes para que conseguíssemos usar o MJPEG. Isso acarretou em um peso de processamento muito grande para a captura da imagem da câmera (que possuía resolução de 1280x720), levando a demora e atrasos na visualização da imagem processada no lado do cliente. Mesmo realizando a troca da câmera para a webcam do servidor (resolução de 640x480), houve uma diminuição neste atraso, porém o sistema ainda encontrava-se travado.
