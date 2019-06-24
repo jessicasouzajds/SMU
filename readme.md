@@ -63,6 +63,7 @@ Feita através do RTSP
 
 [![CenarioRtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG) 
 
+[![Rtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtspp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtspp.PNG) 
 
 
 ### 2. Negociação de mídia:
