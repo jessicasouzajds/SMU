@@ -46,6 +46,11 @@ Na classe GstServer é realizada a chamada da classe SensorFactory e envido ....
 
 ## O algoritmo de detecção facial:
 [CONTINUAR A partir DAQUI]
+Para a detecção de facial foi utilizado o método Haar Cascad o qual é um método eficaz de detecção de objetos proposto por Paul Viola e Michael Jones. É uma abordagem baseada em Machine Learning, em que uma função cascade é treinada com o usp de muitas imagens positivas e negativas a qual é então usada para detectar objetos em outras imagens.
+
+A função implementada usa parametros prontos, os quais se encontram em um arquivo xml. O modelo utilizado foi treinado para faces frontais podendo ter problemas caso o rosto a ser detectado esteja virado em angulo. Devido a constrições temporai foi utilizado o código como base para a implementação.
+
+Para a omição da face detectada foi pego a area em foi detectado o rosto e reduzida a resolução para 4x4 e em seguida aumentada a resolução devolta para a original tendo como resultado uma area pixelada devido a perda de informação. A area da face é sobreescrita com a imagem pixaleda criada fazendo com que se torne impossivel recuperar a imagem original.
 
 
 # [estrutura] O relatório do projeto final deve contemplar os 4 componentes básicos e, como bônus, os 2 adicionais:
