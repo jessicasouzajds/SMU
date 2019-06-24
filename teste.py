@@ -10,22 +10,23 @@ from gi.repository import Gst, GstRtspServer, GObject
 class SensorFactory(GstRtspServer.RTSPMediaFactory):
   def __init__(self, **properties): 
     super(SensorFactory, self).__init__(**properties) 
-    #self.cap = cv2.VideoCapture(0)
-    self.ip = "191.36.14.78"
-    self.port = 5556
-    self.conn = self.recv_uri()
-    self.uri = self.conn[0]
-    self.cap = cv2.VideoCapture(self.uri.decode('utf-8'))
+    #self.cap = cv2.VideoCapture(0) # webcam do computador
+    self.ip = "191.36.14.78" # interface a ser utilizada
+    self.port = 5556 # porta para receber a uri do cliente
+    self.conn = self.recv_uri() # recebe a uri do cliente
+    self.uri = self.conn[0] # string com uri recebida
+    self.cap = cv2.VideoCapture(self.uri.decode('utf-8')) # captura imagens da uri
     self.number_frames = 0 
-    self.fps = 30
+    self.fps = 30 # frames por segundo
     self.duration = 1 / self.fps * Gst.SECOND  # duration of a frame in nanoseconds 
+    # string com os argumentos a serem passados para o GStreamer
     self.launch_string = 'appsrc name=source is-live=true block=true format=GST_FORMAT_TIME ' \
                          'caps=video/x-raw,format=BGR,width=640,height=480,framerate={}/1 ' \
                          '! videoconvert ! video/x-raw,format=I420 ' \
                          '! x264enc speed-preset=ultrafast tune=zerolatency ' \
-                         '! rtph264pay config-interval=1 name=pay0 pt=96'.format(self.fps)
+                         '! rtph264pay config-interval=1 name=pay0 pt=96'.format(self.fps) 
   
-  
+    #arquivo com os parametros do Haar Cascade
     cascPath = "haarcascade_frontalface_default.xml"
 
     # Create the haar cascade
@@ -33,16 +34,16 @@ class SensorFactory(GstRtspServer.RTSPMediaFactory):
 
   def recv_uri(self):
         sock = socket.socket(socket.AF_INET, # Internet
-                        socket.SOCK_STREAM) # UDP
+                        socket.SOCK_STREAM) # TCP
         sock.bind((self.ip, self.port))
         sock.listen(1)
         data, addr = sock.accept()
-        uri = data.recv(1024)
+        uri = data.recv(1024) # espera a uri do cliente
         return (uri, sock, data)
 
   def send_uri(self, sock, data, media_id):
-        msg = "rtsp://"+self.ip+":"+"8554"+ media_id
-        data.send(msg.encode())
+        msg = "rtsp://"+self.ip+":"+"8554"+ media_id # monta a uri da streaming censurada
+        data.send(msg.encode()) # envia a uri para o cliente
         sock.close()
 
   def censored(self, image):
@@ -54,10 +55,7 @@ class SensorFactory(GstRtspServer.RTSPMediaFactory):
             scaleFactor=1.1,
             minNeighbors=5,
             minSize=(30, 30)
-            #flags = cv2.CV_HAAR_SCALE_IMAGE
         )
-
-        #print("Found {0} faces!".format(len(faces)))
 
         width, height, _ = image.shape
 
@@ -71,15 +69,13 @@ class SensorFactory(GstRtspServer.RTSPMediaFactory):
         wi, he = (4, 4)
         # Draw a rectangle around the faces
         for (x, y, w, h) in faces:
-            #cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
             crop_img = gray[y:y+h,x:x+w]
-            #cv2.imshow("croped", crop_img)
             # Resize input to "pixelated" size
             temp = cv2.resize(crop_img, (wi, he), interpolation=cv2.INTER_LINEAR)
 
             # Initialize output image
             output = cv2.resize(temp, (w, h),      interpolation=cv2.INTER_NEAREST)
-            #cv2.imshow("aaaa", output)
+            # substitui a area da face com a imagem pixelada
             image[y:y+h,x:x+w,0] = output
             image[y:y+h,x:x+w,1] = output
             image[y:y+h,x:x+w,2] = output
@@ -89,10 +85,10 @@ class SensorFactory(GstRtspServer.RTSPMediaFactory):
         
   def on_need_data(self, src, lenght):
     if self.cap.isOpened():
-      ret, frame = self.cap.read()
+      ret, frame = self.cap.read() # captura uma imagem
       if ret:
-        image = self.censored(frame)
-        data = image.tostring() 
+        image = self.censored(frame) # detecta e censura o rosto
+        data = image.tostring()  # converte a imagem para uma string
         buf = Gst.Buffer.new_allocate(None, len(data), None)
         buf.fill(0, data)
         buf.duration = self.duration
@@ -121,12 +117,14 @@ class GstServer(GstRtspServer.RTSPServer):
     super(GstServer, self).__init__(**properties) 
     self.factory = SensorFactory() 
     self.factory.set_shared(True)
-    self.media_id = "/" + str(datetime.timestamp(datetime.now()))
-    self.get_mount_points().add_factory(self.media_id, self.factory) 
-    self.factory.send_uri(self.factory.conn[1], self.factory.conn[2], self.media_id)
+    self.media_id = "/" + str(datetime.timestamp(datetime.now())) # cria um id para stream
+    self.get_mount_points().add_factory(self.media_id, self.factory) # cria a stream
+    self.factory.send_uri(self.factory.conn[1], self.factory.conn[2], self.media_id) # envia a uri da stream com a 
+    #imagem processada para o cliente
     self.attach(None) 
 
 
+# inicializa o servidor
 GObject.threads_init() 
 Gst.init(None) 
 
