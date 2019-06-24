@@ -59,13 +59,28 @@ Para a omissão da face detectada, uma vez detectado o rosto foi realizada uma r
 A parte a seguir explora toda a parte de tráfego de dados por detrás da aplicação, detalhando as partes de sinalização, negociação, escolha de caminho e transporte de mídia.
 
 ### 1. Sinalização:
-Feita através do RTSP
+
+#### a. Requisições: 
+
+A figura a seguir mostra no wireshark o agrupamento das requisições existentes na nossa transmissão, obtidas através da opção Telephony>RTSP>Packet Counter. As requisições foram: SETUP, PLAY, GET_PARAMETER, DESCRIBE, OPTIONS. O pacote de setup inicia a sessão RTSP, o pacote de play inicia a transmissão de dados na stream, o pacote de teardown faz com que a sessão RTSP deixe de existir e o describe especifica a apresentação do objeto de mídia. A figura a seguir mostra o agrupamento das mensagens RTSP, com a contagem de cada tipo de pacote gerado. 
+
+[![Rtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtspp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtspp.PNG) 
+
+#### b. Mensagens de Requisição e Respostas: 
+
+A figura a seguir mostra fragmentos de mensagens RTSP com suas respectivas respostas. Houve um problema no início da streaming, onde não foi possível se conectar com a câmera, retornando um "service unavailable", mas logo em seguida reconfiguramos o IP da câmera e conseguimos sucesso na transmissão.
+
+[![msg](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/mensagens-rtsp.png)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/mensagens-rtsp.png) 
+
+A figura a seguir mostra o detalhamento da mensagem, na parte "real time streaming protocol", no wireshark.
 
 [![CenarioRtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtsp.PNG) 
 
-O pacote de setup inicia a sessão RTSP, o pacote de play inicia a transmissão de dados na stream, o pacote de teardown faz com que a sessão RTSP deixe de existir e o describe especifica a apresentação do objeto de mídia. A figura a seguir mostra o agrupamento das mensagens RTSP, com a contagem de cada tipo de pacote gerado. 
-[![Rtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtspp.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtspp.PNG) 
 
+#### c.Transações e Diálogos:
+A Figura a seguir mostra fragmentos da sequência para transações e diálogos. Note que para cada tipo de mensagem (ex. setup, play), há um número de sequência CSEQ que é igual para requisição e resposta, e é incrementado para a próxima mensagem.
+
+[![detRtsp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/det-rtsp.png)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/det-rtsp.png) 
 
 ### 2. Negociação de mídia:
 
