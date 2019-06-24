@@ -2,7 +2,7 @@ import cv2
 import gi 
 import numpy as np
 import socket
-
+from datetime import datetime
 gi.require_version('Gst', '1.0')
 gi.require_version('GstRtspServer', '1.0') 
 from gi.repository import Gst, GstRtspServer, GObject
@@ -10,14 +10,17 @@ from gi.repository import Gst, GstRtspServer, GObject
 class SensorFactory(GstRtspServer.RTSPMediaFactory):
   def __init__(self, **properties): 
     super(SensorFactory, self).__init__(**properties) 
-    #self.cap = cv2.VideoCapture(0)
-    self.uri = self.recv_uri()
-    self.cap = cv2.VideoCapture(self.uri.decode('utf-8'))
+    self.cap = cv2.VideoCapture(0)
+    self.ip = "191.36.14.78"
+    self.port = 5556
+    self.conn = self.recv_uri()
+    self.uri = self.conn[0]
+    #self.cap = cv2.VideoCapture(self.uri.decode('utf-8'))
     self.number_frames = 0 
     self.fps = 30
     self.duration = 1 / self.fps * Gst.SECOND  # duration of a frame in nanoseconds 
     self.launch_string = 'appsrc name=source is-live=true block=true format=GST_FORMAT_TIME ' \
-                         'caps=video/x-raw,format=BGR,width=1280,height=720,framerate={}/1 ' \
+                         'caps=video/x-raw,format=BGR,width=640,height=480,framerate={}/1 ' \
                          '! videoconvert ! video/x-raw,format=I420 ' \
                          '! x264enc speed-preset=ultrafast tune=zerolatency ' \
                          '! rtph264pay config-interval=1 name=pay0 pt=96'.format(self.fps)
@@ -31,15 +34,16 @@ class SensorFactory(GstRtspServer.RTSPMediaFactory):
   def recv_uri(self):
         sock = socket.socket(socket.AF_INET, # Internet
                         socket.SOCK_STREAM) # UDP
-        sock.bind(("191.36.15.80", 5555))
-        sock.listen()
+        sock.bind((self.ip, self.port))
+        sock.listen(1)
         data, addr = sock.accept()
         uri = data.recv(1024)
-        print(addr)
-        sock.send(str("endereco").encode())
+        return (uri, sock, data)
+
+  def send_uri(self, sock, data, media_id):
+        msg = "rtsp://"+self.ip+":"+"8554"+ media_id
+        data.send(msg.encode())
         sock.close()
-        print(uri)
-        return uri
 
   def censored(self, image):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -116,8 +120,10 @@ class GstServer(GstRtspServer.RTSPServer):
   def __init__(self, **properties): 
     super(GstServer, self).__init__(**properties) 
     self.factory = SensorFactory() 
-    self.factory.set_shared(True) 
-    self.get_mount_points().add_factory("/test", self.factory) 
+    self.factory.set_shared(True)
+    self.media_id = "/" + str(datetime.timestamp(datetime.now()))
+    self.get_mount_points().add_factory(self.media_id, self.factory) 
+    self.factory.send_uri(self.factory.conn[1], self.factory.conn[2], self.media_id)
     self.attach(None) 
 
 
@@ -125,6 +131,6 @@ GObject.threads_init()
 Gst.init(None) 
 
 server = GstServer() 
-server.set_address("191.36.15.80")
+server.set_address(server.factory.ip)
 loop = GObject.MainLoop() 
 loop.run()
