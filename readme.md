@@ -84,8 +84,7 @@ Os tipos de mídia e codecs podem ser vistos nos pacotes SDP (que descrevem a se
 ### 3. Escolha de caminho;
 
 #### a. Protocolos usados:
-[escrever aqui]
-
+Durante a analise dos pacotes no wireshark não foram encontrados os pacotes com a troca de rotas. Também pode ser observado que embora a transmissão dos pacotes RTSP no servidor ocorram na interface 191.36.14.78, mesma rede da camera conforme selecionado no programa desenvolvido, a transmissão da midia ocorre na interface 191.36.11.76 que se encontram na mesma sub rede do cliente
 
 
 ### 4. Transporte de Mídia:
