@@ -4,7 +4,7 @@
 Autores: Bruno A. de Pinho e Jessica de Souza
 ```
 
-O objetivo deste trabalho é realizar a detecção facial em tempo real a partir de uma câmera IP utilizando algoritmos de visão computacional e o uso de RTSP para a transmissão da mídia.
+O objetivo deste trabalho é realizar a detecção facial em tempo real a partir de uma câmera IP utilizando algoritmos de visão computacional e o uso de RTSP para a transmissão da mídia. O arquivo com captura dos pacote utilizados nesse trabalho pode ser encontrado [aqui](https://drive.google.com/open?id=1fjvjj6kFI97BoT07Brg2wAK1wqSzFUsZ).
 
 ## - Resumo do cenário:
 Foi realizada uma transmissão de vídeo via streaming, utilizando o protocolo RTSP para negociação e transmissão. O primeiro streaming foi a imagem de captura da câmera VIP-S4000, da Intelbras. Esta streaming foi oferecida através de uma URI RTSP para o servidor de processamento. O servidor de processamento realizou a análise da imagem, identificando faces e inserindo a censura de rostos, utilizando visão computacional. Por fim, a imagem processada foi retornada ao cliente através de uma segunda URI RTSP. A imagem abaixo exemplifica o cenário utilizado.
