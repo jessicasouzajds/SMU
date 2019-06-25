@@ -47,7 +47,7 @@ Na classe GstServer é realizada a preparação do servidor RTSP, preparando a m
 
 Para a detecção de facial foi utilizado o método Haar Cascade, o qual é um método eficaz de detecção de objetos proposto por Paul Viola e Michael Jones. É uma abordagem baseada em Machine Learning em que uma função cascade é treinada com diversas imagens positivas e negativas, a qual é então usada para detectar objetos em outras imagens.
 
-A função implementada usa parâmetros prontos, os quais se encontram em um arquivo xml. O modelo utilizado foi treinado para faces frontais podendo ter problemas caso o rosto a ser detectado esteja virado em ângulo. Devido a constrições temporais foi utilizado o [código](https://github.com/shantnu/FaceDetect) como base para a implementação.
+A função implementada usa parâmetros prontos, os quais se encontram em um arquivo xml. O modelo utilizado foi treinado para faces frontais podendo ter problemas caso o rosto a ser detectado esteja virado em ângulo. Devido a constrições temporais foi utilizado o código como base para a implementação.
 
 Para a omissão da face detectada, uma vez detectado o rosto foi realizada uma redução de resolução para 4x4, em seguida foi aumentada a resolução de volta para a original e assim tendo como resultado uma área pixelada devido à perda de informação. A área da face é então sobrescrita com a imagem pixelada, fazendo com que se torne impossivel recuperar a imagem original. A figura a seguir mostra o funcionamento do algoritmo de detecção facial e pixelização.
 
@@ -125,15 +125,20 @@ As figuras a seguir mostram a ferramenta de análise de pacotes RTP, porém a la
 [![rtp](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/wire-rtp2.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/rtp.PNG) 
 
 
-
 ### 5. Qualidade de serviço:
 
 Para a qualidade de serviço, podemos observar no wireshark o uso do protocolo RTCP, que realiza as medições de atraso de jitter, conforme mostra a figura a seguir.
 
 [![qos](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/qos.PNG)](https://github.com/jessicasouzajds/SMU/blob/face_detect/Images/qos.PNG) 
 
+## Conclusões:
 
-(Opcional) Segurança.
+O trabalho desenvolvido propôs a implementação de um algoritmo de detecção facial com pixelização que realiza a coleta da imagem de uma câmera IP e faz o processamento em tempo real através de serviços com o protocolo RTSP. Verificamos que o tipo de mídia fez com que a transmissão ficasse muito pesada, porém conseguimos realizar as streams com sucesso sem a possibilidade de cálculo da latência do sistema.
 
-Link referência relatório: https://boidacarapreta.github.io/smu20191/projeto_final.html
-Link do doc no drive: https://docs.google.com/document/d/1l3-EUnozrC__X8u3-rP3zjWsLCE4jsb9OfjaAeeTzh0/edit
+## Referências:
+
+https://tools.ietf.org/html/rfc2326
+
+https://tools.ietf.org/html/rfc4566
+
+https://tools.ietf.org/html/rfc3550
